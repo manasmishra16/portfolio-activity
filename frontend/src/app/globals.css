@@ -1,0 +1,628 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: var(--font-syne), sans-serif;
+  --font-heading: var(--font-space-grotesk), sans-serif;
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-mono), monospace;
+
+  --color-studio-black: #0c0d0e;
+  --color-studio-dark: #121316;
+  --color-studio-card: #14161a;
+  --color-studio-card-hover: #1a1d23;
+  --color-studio-border: #22252c;
+  --color-studio-border-light: #323742;
+  --color-studio-text-primary: #ffffff;
+  --color-studio-text-secondary: #c2c9d6;
+  --color-studio-text-muted: #8890a0;
+  --color-studio-orange: #ff5a1f;
+  --color-studio-orange-bright: #ff7700;
+  --color-studio-orange-glow: rgba(255, 90, 31, 0.4);
+}
+
+:root {
+  --background: #0c0d0e;
+  --foreground: #ededed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0c0d0e;
+  color: #c2c9d6;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings System */
+h1, .font-display {
+  font-family: var(--font-syne), sans-serif;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+h2, h3, h4, .font-heading {
+  font-family: var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+/* Mono system */
+.font-mono-spaced {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Editorial Body Text standard */
+p {
+  line-height: 1.68;
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0d0e;
+}
+::-webkit-scrollbar-thumb {
+  background: #25282e;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff5a1f;
+}
+
+/* Keyframes */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-orange {
+  0%, 100% {
+    opacity: 0.6;
+    box-shadow: 0 0 15px rgba(255, 90, 31, 0.35);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 30px rgba(255, 90, 31, 0.8), 0 0 50px rgba(255, 119, 0, 0.3);
+  }
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+
+.animate-pulse-orange {
+  animation: pulse-orange 2.5s ease-in-out infinite;
+}
+
+.animate-float-subtle {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Vertical Text Class */
+.vertical-lr {
+  writing-mode: vertical-lr;
+}
+
+/* Raw brutalist grid pattern */
+.bg-brutalist-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Subtle grain overlay */
+.bg-grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* =========================================================================
+   LIGHT / DARK THEME SYSTEM & SMOOTH TRANSITIONS
+   ========================================================================= */
+
+/* Smooth, subtle theme transition */
+/* =========================================================================
+   LIGHT / DARK THEME SYSTEM & SMOOTH TRANSITIONS
+   ========================================================================= */
+
+/* Smooth, subtle theme transition */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition-delay: 0s !important;
+}
+
+/* -------------------------------------------------------------------------
+   LIGHT THEME: Editorial Platinum & White Surface Design with Orange Accents
+   ------------------------------------------------------------------------- */
+html.light,
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html.light body,
+html[data-theme="light"] body {
+  background-color: #f8f9fa !important;
+  color: #334155 !important;
+}
+
+/* Root Page Backgrounds */
+html.light main,
+html.light .min-h-screen,
+html.light .bg-\[\#0c0d0e\],
+html.light .bg-\[\#090a0d\],
+html.light .bg-\[\#08090b\],
+html.light [class*="bg-[#0c0d0e]"],
+html.light [class*="bg-[#090a0d]"],
+html.light [class*="bg-[#08090b]"],
+[data-theme="light"] main,
+[data-theme="light"] .min-h-screen,
+[data-theme="light"] [class*="bg-[#0c0d0e]"],
+[data-theme="light"] [class*="bg-[#090a0d]"],
+[data-theme="light"] [class*="bg-[#08090b]"] {
+  background-color: #f8f9fa !important;
+}
+
+/* Header & Scrolled Navigation Bar in Light Mode */
+html.light header[class*="backdrop-blur"],
+[data-theme="light"] header[class*="backdrop-blur"] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* All Surface Cards, Containers, Sections & Panels */
+html.light .bg-\[\#121418\],
+html.light .bg-\[\#121417\],
+html.light .bg-\[\#131518\],
+html.light .bg-\[\#131519\],
+html.light .bg-\[\#14161a\],
+html.light .bg-\[\#141619\],
+html.light .bg-\[\#111316\],
+html.light .bg-\[\#111317\],
+html.light .bg-\[\#101215\],
+html.light .bg-\[\#16181d\],
+html.light .bg-\[\#181a1f\],
+html.light .bg-\[\#17191e\],
+html.light .bg-\[\#0e1013\],
+html.light .bg-\[\#0e1012\],
+html.light .bg-\[\#15171b\],
+html.light .bg-\[\#15171d\],
+html.light .bg-\[\#161820\],
+html.light .bg-\[\#181a20\],
+html.light .bg-\[\#1a1c20\],
+html.light .bg-\[\#1a1c21\],
+html.light .bg-\[\#1a1c22\],
+html.light .bg-\[\#22252b\],
+html.light .bg-\[\#23262c\],
+html.light [class*="bg-[#121418]"],
+html.light [class*="bg-[#121417]"],
+html.light [class*="bg-[#131518]"],
+html.light [class*="bg-[#131519]"],
+html.light [class*="bg-[#14161a]"],
+html.light [class*="bg-[#141619]"],
+html.light [class*="bg-[#111316]"],
+html.light [class*="bg-[#111317]"],
+html.light [class*="bg-[#101215]"],
+html.light [class*="bg-[#16181d]"],
+html.light [class*="bg-[#181a1f]"],
+html.light [class*="bg-[#17191e]"],
+html.light [class*="bg-[#0e1013]"],
+html.light [class*="bg-[#0e1012]"],
+html.light [class*="bg-[#15171b]"],
+html.light [class*="bg-[#15171d]"],
+html.light [class*="bg-[#161820]"],
+html.light [class*="bg-[#181a20]"],
+html.light [class*="bg-[#1a1c20]"],
+html.light [class*="bg-[#1a1c21]"],
+html.light [class*="bg-[#1a1c22]"],
+html.light [class*="bg-[#22252b]"],
+html.light [class*="bg-[#23262c]"],
+[data-theme="light"] [class*="bg-[#121418]"],
+[data-theme="light"] [class*="bg-[#121417]"],
+[data-theme="light"] [class*="bg-[#131518]"],
+[data-theme="light"] [class*="bg-[#131519]"],
+[data-theme="light"] [class*="bg-[#14161a]"],
+[data-theme="light"] [class*="bg-[#141619]"],
+[data-theme="light"] [class*="bg-[#111316]"],
+[data-theme="light"] [class*="bg-[#111317]"],
+[data-theme="light"] [class*="bg-[#101215]"],
+[data-theme="light"] [class*="bg-[#16181d]"],
+[data-theme="light"] [class*="bg-[#181a1f]"],
+[data-theme="light"] [class*="bg-[#17191e]"],
+[data-theme="light"] [class*="bg-[#0e1013]"],
+[data-theme="light"] [class*="bg-[#0e1012]"],
+[data-theme="light"] [class*="bg-[#15171b]"],
+[data-theme="light"] [class*="bg-[#15171d]"],
+[data-theme="light"] [class*="bg-[#161820]"],
+[data-theme="light"] [class*="bg-[#181a20]"],
+[data-theme="light"] [class*="bg-[#1a1c20]"],
+[data-theme="light"] [class*="bg-[#1a1c21]"],
+[data-theme="light"] [class*="bg-[#1a1c22]"],
+[data-theme="light"] [class*="bg-[#22252b]"],
+[data-theme="light"] [class*="bg-[#23262c]"] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Secondary / inner badges, pills & code blocks (soft light gray) */
+html.light .bg-\[\#16181e\],
+html.light .bg-\[\#1b1d22\],
+html.light .bg-\[\#1d1f25\],
+html.light .bg-\[\#1f2228\],
+html.light .bg-\[\#202329\],
+html.light .bg-\[\#20232a\],
+html.light [class*="bg-[#16181e]"],
+html.light [class*="bg-[#1b1d22]"],
+html.light [class*="bg-[#1d1f25]"],
+html.light [class*="bg-[#1f2228]"],
+html.light [class*="bg-[#202329]"],
+html.light [class*="bg-[#20232a]"],
+[data-theme="light"] [class*="bg-[#16181e]"],
+[data-theme="light"] [class*="bg-[#1b1d22]"],
+[data-theme="light"] [class*="bg-[#1d1f25]"],
+[data-theme="light"] [class*="bg-[#1f2228]"],
+[data-theme="light"] [class*="bg-[#202329]"],
+[data-theme="light"] [class*="bg-[#20232a]"] {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+/* All Borders Across the Whole Site */
+html.light [class*="border-[#0"],
+html.light [class*="border-[#1"],
+html.light [class*="border-[#2"],
+html.light [class*="border-[#3"],
+html.light .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/20,
+[data-theme="light"] [class*="border-[#0"],
+[data-theme="light"] [class*="border-[#1"],
+[data-theme="light"] [class*="border-[#2"],
+[data-theme="light"] [class*="border-[#3"],
+[data-theme="light"] .border-white\/5,
+[data-theme="light"] .border-white\/10,
+[data-theme="light"] .border-white\/20 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Headings & High-Emphasis Text */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6,
+html.light .font-heading,
+html.light .font-display,
+html.light .text-white,
+html.light .text-\[\#ffffff\],
+html.light .text-\[\#ededed\],
+html.light [class*="text-white"],
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6,
+[data-theme="light"] .font-heading,
+[data-theme="light"] .font-display,
+[data-theme="light"] .text-white,
+[data-theme="light"] [class*="text-white"] {
+  color: #0f172a !important;
+}
+
+/* Secondary & Body Text */
+html.light p,
+html.light [class*="text-[#c0c7d6]"],
+html.light [class*="text-[#c2c7d2]"],
+html.light [class*="text-[#c2c9d6]"],
+html.light [class*="text-[#c5c9d4]"],
+html.light [class*="text-[#c5cbd6]"],
+html.light [class*="text-[#c7cbd4]"],
+html.light [class*="text-[#c8d0de]"],
+html.light [class*="text-[#cbd0dc]"],
+html.light [class*="text-[#cbd1de]"],
+html.light [class*="text-[#d0d7e5]"],
+html.light [class*="text-[#b0b6c4]"],
+html.light [class*="text-[#b0b8c8]"],
+html.light [class*="text-[#b3b8c4]"],
+html.light [class*="text-[#b4bccb]"],
+html.light [class*="text-[#b8bdc8]"],
+html.light [class*="text-[#b8bfce]"],
+html.light [class*="text-[#a0a5b2]"],
+html.light [class*="text-[#a2a8b6]"],
+html.light [class*="text-[#a2aab9]"],
+html.light [class*="text-[#a3abbd]"],
+html.light [class*="text-[#a5abb7]"],
+html.light [class*="text-[#a5abb8]"],
+html.light [class*="text-[#a8afbd]"],
+html.light [class*="text-[#a8b1c4]"],
+[data-theme="light"] p,
+[data-theme="light"] [class*="text-[#c"],
+[data-theme="light"] [class*="text-[#b"],
+[data-theme="light"] [class*="text-[#a"] {
+  color: #334155 !important;
+}
+
+/* Muted, Eyebrows & Form Labels */
+html.light [class*="text-[#4a4f5b]"],
+html.light [class*="text-[#555a64]"],
+html.light [class*="text-[#5a5f6b]"],
+html.light [class*="text-[#5b606c]"],
+html.light [class*="text-[#5e6678]"],
+html.light [class*="text-[#5f6574]"],
+html.light [class*="text-[#606573]"],
+html.light [class*="text-[#616a7d]"],
+html.light [class*="text-[#626775]"],
+html.light [class*="text-[#636875]"],
+html.light [class*="text-[#64748b]"],
+html.light [class*="text-[#6a707d]"],
+html.light [class*="text-[#6c7588]"],
+html.light [class*="text-[#6e7481]"],
+html.light [class*="text-[#6e7482]"],
+html.light [class*="text-[#717682]"],
+html.light [class*="text-[#717684]"],
+html.light [class*="text-[#717785]"],
+html.light [class*="text-[#71798a]"],
+html.light [class*="text-[#727887]"],
+html.light [class*="text-[#767e91]"],
+html.light [class*="text-[#787e8d]"],
+html.light [class*="text-[#788090]"],
+html.light [class*="text-[#788194]"],
+html.light [class*="text-[#7e8492]"],
+html.light [class*="text-[#7e8594]"],
+html.light [class*="text-[#808899]"],
+html.light [class*="text-[#878e9c]"],
+html.light [class*="text-[#8890a0]"],
+html.light [class*="text-[#8a909d]"],
+html.light [class*="text-[#8a909f]"],
+html.light [class*="text-[#8a92a3]"],
+html.light [class*="text-[#8c94a5]"],
+html.light [class*="text-[#8e94a0]"],
+html.light [class*="text-[#8e94a2]"],
+html.light [class*="text-[#8e95a5]"],
+html.light [class*="text-[#9199ab]"],
+html.light [class*="text-[#9297a5]"],
+html.light [class*="text-[#9298a6]"],
+html.light [class*="text-[#9aa0ae]"],
+html.light [class*="text-[#9aa2b4]"],
+html.light [class*="text-[#9aa2b5]"],
+html.light [class*="text-[#9aa3b5]"],
+html.light [class*="text-[#9da6b8]"],
+[data-theme="light"] [class*="text-[#4"],
+[data-theme="light"] [class*="text-[#5"],
+[data-theme="light"] [class*="text-[#6"],
+[data-theme="light"] [class*="text-[#7"],
+[data-theme="light"] [class*="text-[#8"],
+[data-theme="light"] [class*="text-[#9"] {
+  color: #64748b !important;
+}
+
+/* Form Inputs & Textareas in Light Mode */
+html.light input,
+html.light textarea,
+html.light select,
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+html.light input::placeholder,
+html.light textarea::placeholder,
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+html.light input:focus,
+html.light textarea:focus,
+[data-theme="light"] input:focus,
+[data-theme="light"] textarea:focus {
+  border-color: #ff5a1f !important;
+  box-shadow: 0 0 0 2px rgba(255, 90, 31, 0.2) !important;
+}
+
+/* Contact Labels explicitly crisp */
+html.light label,
+[data-theme="light"] label {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+/* PRESERVE BRAND ACCENTS */
+html.light .text-\[\#ff5a1f\],
+html.light [class*="text-[#ff5a1f]"],
+[data-theme="light"] [class*="text-[#ff5a1f]"] {
+  color: #ff5a1f !important;
+}
+html.light .text-\[\#ff7700\],
+html.light [class*="text-[#ff7700]"],
+[data-theme="light"] [class*="text-[#ff7700]"] {
+  color: #e04812 !important;
+}
+html.light .text-\[\#00ff88\],
+html.light [class*="text-[#00ff88]"],
+[data-theme="light"] [class*="text-[#00ff88]"] {
+  color: #059669 !important;
+}
+html.light .text-\[\#ffbd2e\],
+html.light [class*="text-[#ffbd2e]"],
+[data-theme="light"] [class*="text-[#ffbd2e]"] {
+  color: #d97706 !important;
+}
+html.light .text-red-400,
+[data-theme="light"] .text-red-400 {
+  color: #dc2626 !important;
+}
+
+/* Brand Buttons & Pills with orange accent */
+html.light .bg-\[\#ff5a1f\],
+html.light [class*="bg-[#ff5a1f]"]:not([class*="/"]),
+[data-theme="light"] .bg-\[\#ff5a1f\],
+[data-theme="light"] [class*="bg-[#ff5a1f]"]:not([class*="/"]) {
+  background-color: #ff5a1f !important;
+  color: #ffffff !important;
+}
+html.light [class*="bg-[#ff5a1f]/10"],
+html.light [class*="bg-[#ff5a1f]/15"],
+html.light [class*="bg-[#ff5a1f]/20"],
+[data-theme="light"] [class*="bg-[#ff5a1f]/10"],
+[data-theme="light"] [class*="bg-[#ff5a1f]/15"],
+[data-theme="light"] [class*="bg-[#ff5a1f]/20"] {
+  background-color: rgba(255, 90, 31, 0.1) !important;
+  color: #ff5a1f !important;
+  border-color: rgba(255, 90, 31, 0.25) !important;
+}
+
+/* Vertical Rail in Light Mode */
+html.light aside,
+[data-theme="light"] aside {
+  border-color: #e2e8f0 !important;
+  background-color: transparent !important;
+}
+html.light aside span,
+html.light aside a,
+[data-theme="light"] aside span,
+[data-theme="light"] aside a {
+  color: #64748b !important;
+}
+html.light aside a:hover,
+[data-theme="light"] aside a:hover {
+  color: #ff5a1f !important;
+}
+
+/* Brutalist grid in Light Mode */
+html.light .bg-brutalist-grid,
+[data-theme="light"] .bg-brutalist-grid {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
+}
+
+/* Scrollbar in Light Mode */
+html.light ::-webkit-scrollbar-track,
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+html.light ::-webkit-scrollbar-thumb,
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+html.light ::-webkit-scrollbar-thumb:hover,
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #ff5a1f;
+}
+
+/* MenuDrawer in Light Mode */
+html.light .fixed.bg-\[\#0c0d0e\]\/95,
+[data-theme="light"] .fixed.bg-\[\#0c0d0e\]\/95 {
+  background-color: rgba(248, 249, 250, 0.98) !important;
+}
+
+/* Hero Vignette & Stats Pill in Light Mode */
+html.light .bg-radial,
+[data-theme="light"] .bg-radial {
+  background-image: radial-gradient(circle at 65% 45%, rgba(255, 90, 31, 0.06) 0%, rgba(248, 249, 250, 0.6) 45%, #f8f9fa 90%) !important;
+}
+
+html.light .bg-\[\#0d1017\]\/85,
+[data-theme="light"] .bg-\[\#0d1017\]\/85 {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-\[\#12151c\]\/90,
+[data-theme="light"] .bg-\[\#12151c\]\/90 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .border-\[\#2c3240\],
+html.light .border-\[\#2c3345\],
+[data-theme="light"] .border-\[\#2c3240\],
+[data-theme="light"] .border-\[\#2c3345\] {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .divide-white\/10 > :not([hidden]) ~ :not([hidden]),
+[data-theme="light"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #e2e8f0 !important;
+}
+
+/* Modal backdrop in Light Mode */
+html.light .bg-\[\#0c0d0e\]\/90,
+[data-theme="light"] .bg-\[\#0c0d0e\]\/90 {
+  background-color: rgba(15, 23, 42, 0.5) !important;
+}
+
+/* Footer in Light Mode */
+html.light footer,
+[data-theme="light"] footer {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+html.light footer a:hover,
+[data-theme="light"] footer a:hover,
+html.light footer button:hover,
+[data-theme="light"] footer button:hover {
+  color: #0f172a !important;
+}
+
+
+
