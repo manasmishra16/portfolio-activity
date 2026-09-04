@@ -44,19 +44,21 @@ interface ResponsiveConfig {
 function getResponsiveConfig(width: number): ResponsiveConfig {
   if (width < 480) {
     // Small to medium smartphones (320px - 479px)
-    // Placed neatly in its dedicated viewport: centered, nicely proportioned, supporting visual
-    const factor = Math.max(0.62, Math.min(0.76, (width / 400) * 0.72));
+    // Elegantly scaled down to support the text hierarchy, sitting gracefully in the lower half
+    const factor = Math.max(0.48, Math.min(0.60, (width / 400) * 0.58));
     return {
       isMobile: true,
       isTablet: false,
       scale: factor,
-      position: [0, -0.22, 0],
-      rotation: [-0.02, -0.16, 0],
-      plinthSize: [2.8, 0.24, 2.3],
-      shadowPos: [0, -0.42, 0],
-      shadowScale: 4.8,
-      cameraPos: [0, 0.52, 4.4],
-      fov: 38,
+      // Lowered so it sits cleanly below the hero typography and CTA buttons
+      position: [0, -0.78, 0],
+      // Tasteful slight angle for depth while keeping terminal screen readable
+      rotation: [-0.02, -0.15, 0],
+      plinthSize: [2.6, 0.22, 2.2],
+      shadowPos: [0, -0.92, 0],
+      shadowScale: 4.2,
+      cameraPos: [0, 0.55, 4.8],
+      fov: 42,
       maxDpr: 1.25,
     };
   } else if (width < 768) {
@@ -64,14 +66,14 @@ function getResponsiveConfig(width: number): ResponsiveConfig {
     return {
       isMobile: true,
       isTablet: false,
-      scale: 0.85,
-      position: [0, -0.20, 0],
-      rotation: [-0.02, -0.20, 0],
-      plinthSize: [3.4, 0.28, 2.8],
-      shadowPos: [0, -0.46, 0],
-      shadowScale: 5.6,
-      cameraPos: [0, 0.60, 4.6],
-      fov: 38,
+      scale: 0.70,
+      position: [0, -0.65, 0],
+      rotation: [-0.02, -0.18, 0],
+      plinthSize: [3.2, 0.26, 2.6],
+      shadowPos: [0, -0.84, 0],
+      shadowScale: 5.0,
+      cameraPos: [0, 0.65, 4.8],
+      fov: 40,
       maxDpr: 1.25,
     };
   } else if (width < 1024) {
@@ -108,7 +110,7 @@ function getResponsiveConfig(width: number): ResponsiveConfig {
 }
 
 // Controlled mouse parallax rig with gentle, organic breathing idle motion
-// Respects prefers-reduced-motion
+// Respects prefers-reduced-motion and touch devices
 function SceneParallaxRig({
   children,
   reducedMotion = false,
@@ -128,18 +130,18 @@ function SceneParallaxRig({
     }
 
     const time = state.clock.getElapsedTime();
-    // Subtle organic breathing float
-    const idleRotX = Math.sin(time * 0.7) * 0.008;
-    const idleRotY = Math.cos(time * 0.5) * 0.010;
+    // Subtle breathing float
+    const idleRotX = Math.sin(time * 0.7) * 0.005;
+    const idleRotY = Math.cos(time * 0.5) * 0.007;
 
     target.current.x = THREE.MathUtils.lerp(
       target.current.x,
-      -state.pointer.y * 0.022 + idleRotX,
+      -state.pointer.y * 0.015 + idleRotX,
       0.04
     );
     target.current.y = THREE.MathUtils.lerp(
       target.current.y,
-      state.pointer.x * 0.030 + idleRotY,
+      state.pointer.x * 0.02 + idleRotY,
       0.04
     );
 
