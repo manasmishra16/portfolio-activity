@@ -32,7 +32,7 @@ export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
-    <main className="relative w-screen h-screen h-[100dvh] overflow-hidden bg-[#090a0d] text-[#ededed] select-none">
+    <main className="relative w-screen min-h-screen lg:h-screen lg:h-[100dvh] overflow-x-hidden lg:overflow-hidden bg-[#090a0d] text-[#ededed] select-none">
       {/* Custom Interactive Follow Cursor */}
       <CustomCursor />
 
@@ -52,7 +52,7 @@ export default function HomePage() {
       />
 
       {/* DEDICATED HERO SECTION WITH 3D WORKSTATION */}
-      <section className="relative w-full h-full overflow-hidden bg-[#090a0d]">
+      <section className="relative w-full min-h-screen lg:h-full overflow-hidden bg-[#090a0d] flex flex-col justify-between">
         {/* Subtle Background Atmosphere: Deep Radial Vignette */}
         <div className="absolute inset-0 bg-radial from-[#12151d]/30 via-[#090a0d]/70 to-[#090a0d] pointer-events-none" />
 

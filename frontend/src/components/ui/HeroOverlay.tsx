@@ -21,22 +21,22 @@ const STATS = [
 
 export const HeroOverlay: React.FC = () => {
   return (
-    <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-between pt-20 sm:pt-24 pb-6 sm:pb-8 px-4 sm:px-10 md:px-14 lg:px-20 md:pl-24 max-w-[1680px] mx-auto w-full">
+    <div className="pointer-events-none relative lg:absolute inset-0 z-20 flex flex-col justify-between pt-20 sm:pt-24 pb-6 sm:pb-8 px-4 sm:px-8 md:px-14 lg:px-20 md:pl-24 max-w-[1680px] mx-auto w-full min-h-screen lg:min-h-0">
       {/* UPPER / MAIN SECTION: 2-COLUMN GRID */}
-      <div className="flex-1 flex items-start sm:items-center pt-2 sm:pt-0">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="flex-1 flex items-start pt-2 sm:pt-6 lg:pt-0 lg:items-center">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           {/* LEFT 45%: EDITORIAL TYPOGRAPHY & ACTIONS */}
-          <div className="lg:col-span-6 xl:col-span-5 pointer-events-auto flex flex-col justify-center max-w-[500px]">
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2.5 mb-3 sm:mb-5">
+          <div className="lg:col-span-6 xl:col-span-5 pointer-events-auto flex flex-col justify-center max-w-[520px]">
+            {/* 1. Eyebrow */}
+            <div className="inline-flex items-center gap-2.5 mb-3 sm:mb-4">
               <span className="w-2 h-2 rounded-full bg-[#ff5a1f] shadow-[0_0_10px_rgba(255,90,31,0.9)] animate-pulse" />
               <span className="font-mono text-[10px] sm:text-xs text-[#9aa2b5] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-semibold">
                 KSIT BENGALURU &apos;27 // DATA &amp; SYSTEMS
               </span>
             </div>
 
-            {/* Primary Display Title */}
-            <h1 className="font-heading font-extrabold text-[30px] min-[360px]:text-[34px] min-[400px]:text-[38px] sm:text-5xl lg:text-[58px] text-white tracking-[-0.035em] leading-[0.96] mb-4 sm:mb-6 select-none">
+            {/* 2. Primary Display Title with clamp: prominent, non-colliding, fits 320px–414px */}
+            <h1 className="font-heading font-extrabold text-[clamp(26px,7.5vw,58px)] text-white tracking-[-0.035em] leading-[1.0] mb-3 sm:mb-5 select-none">
               <div className="flex items-center gap-2 sm:gap-3">
                 <span>DATA</span>
                 <span className="text-[#ff5a1f] font-normal">→</span>
@@ -48,13 +48,13 @@ export const HeroOverlay: React.FC = () => {
               </div>
             </h1>
 
-            {/* Crisp Balanced Subtitle */}
-            <p className="text-xs sm:text-base text-[#a3abbd] font-sans leading-relaxed mb-6 sm:mb-8 max-w-[440px]">
+            {/* 3. Balanced Subtitle */}
+            <p className="text-xs sm:text-base text-[#a3abbd] font-sans leading-relaxed mb-5 sm:mb-7 max-w-[460px]">
               Computer Science Engineer building predictive deep learning models, automated data pipelines, and responsive, interactive digital applications.
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            {/* 4. Action Buttons (Comfortable wrapping & padding on mobile) */}
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-4">
               <Link
                 href="/projects"
                 className="group inline-flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 rounded-full bg-[#ff5a1f] hover:bg-[#ff7700] text-white text-[11px] sm:text-sm font-mono font-bold tracking-wider uppercase shadow-[0_0_30px_rgba(255,90,31,0.45)] hover:shadow-[0_0_40px_rgba(255,90,31,0.65)] transition-all duration-300 active:scale-[0.98]"
@@ -73,16 +73,17 @@ export const HeroOverlay: React.FC = () => {
             </div>
           </div>
 
-          {/* RIGHT 55%: PURE 3D WORKSTATION VIEWPORT */}
+          {/* RIGHT 55%: PURE 3D WORKSTATION VIEWPORT (On mobile, spacer that gives 3D laptop dedicated visual area) */}
+          <div className="block lg:hidden h-[260px] xs:h-[300px] sm:h-[360px] w-full pointer-events-none" />
           <div className="hidden lg:block lg:col-span-6 xl:col-span-7 h-full pointer-events-none" />
         </div>
       </div>
 
       {/* LOWER SECTION: FLOATING GLASS STATS BAR + SCROLL DOWN */}
-      <div className="pointer-events-auto flex items-end justify-between w-full pt-3 max-w-full overflow-hidden">
+      <div className="pointer-events-auto flex items-end justify-between w-full pt-4 mt-auto max-w-full overflow-hidden">
         {/* Floating Glass Stats Pill Container with smooth horizontal scroll on ultra-narrow phones */}
         <div className="w-full sm:w-auto max-w-full overflow-x-auto scrollbar-none py-1">
-          <div className="inline-flex items-center divide-x divide-white/10 rounded-xl sm:rounded-2xl border border-white/10 bg-[#0d1017]/85 backdrop-blur-xl px-2.5 sm:px-7 py-2 sm:py-4 shadow-[0_20px_50px_rgba(0,0,0,0.6)] min-w-max">
+          <div className="inline-flex items-center divide-x divide-white/10 rounded-xl sm:rounded-2xl border border-white/10 bg-[#0d1017]/85 backdrop-blur-xl px-2.5 sm:px-7 py-2.5 sm:py-4 shadow-[0_20px_50px_rgba(0,0,0,0.6)] min-w-max">
             {STATS.map((stat, idx) => (
               <div
                 key={idx}

@@ -44,20 +44,20 @@ interface ResponsiveConfig {
 function getResponsiveConfig(width: number): ResponsiveConfig {
   if (width < 480) {
     // Small to medium smartphones (320px - 479px)
-    // Scale dynamically down for extremely small devices (e.g. 320px)
-    const factor = Math.max(0.68, Math.min(0.85, (width / 400) * 0.82));
+    // Elegantly scaled down to support the text hierarchy, sitting gracefully in the lower half
+    const factor = Math.max(0.48, Math.min(0.60, (width / 400) * 0.58));
     return {
       isMobile: true,
       isTablet: false,
       scale: factor,
-      // Shifted downwards to leave generous breathing room for the hero headline
-      position: [0, -0.42, 0],
-      // Rotated forward slightly so the screen faces camera squarely and is easily readable
-      rotation: [-0.02, -0.16, 0],
-      plinthSize: [3.4, 0.3, 2.8],
-      shadowPos: [0, -0.66, 0],
-      shadowScale: 5.5,
-      cameraPos: [0, 0.85, 5.2],
+      // Lowered so it sits cleanly below the hero typography and CTA buttons
+      position: [0, -0.78, 0],
+      // Tasteful slight angle for depth while keeping terminal screen readable
+      rotation: [-0.02, -0.15, 0],
+      plinthSize: [2.6, 0.22, 2.2],
+      shadowPos: [0, -0.92, 0],
+      shadowScale: 4.2,
+      cameraPos: [0, 0.55, 4.8],
       fov: 42,
       maxDpr: 1.25,
     };
@@ -66,13 +66,13 @@ function getResponsiveConfig(width: number): ResponsiveConfig {
     return {
       isMobile: true,
       isTablet: false,
-      scale: 0.95,
-      position: [0, -0.32, 0],
-      rotation: [-0.02, -0.22, 0],
-      plinthSize: [3.8, 0.32, 3.0],
-      shadowPos: [0, -0.68, 0],
-      shadowScale: 6.5,
-      cameraPos: [0, 0.95, 5.0],
+      scale: 0.70,
+      position: [0, -0.65, 0],
+      rotation: [-0.02, -0.18, 0],
+      plinthSize: [3.2, 0.26, 2.6],
+      shadowPos: [0, -0.84, 0],
+      shadowScale: 5.0,
+      cameraPos: [0, 0.65, 4.8],
       fov: 40,
       maxDpr: 1.25,
     };
