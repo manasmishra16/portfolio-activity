@@ -173,7 +173,7 @@ export const ContactFooter: React.FC<ContactFooterProps> = ({
         </div>
 
         {/* Right Validated Contact Form Card */}
-        <div className="lg:col-span-6 p-8 sm:p-10 rounded-2xl border border-[#26292f] bg-[#131518] shadow-2xl relative">
+        <div className="lg:col-span-6 p-5 sm:p-8 md:p-10 rounded-2xl border border-[#26292f] bg-[#131518] shadow-2xl relative">
           {submitted ? (
             <div className="py-16 text-center animate-[fadeIn_0.3s_ease-out]">
               <div className="w-16 h-16 rounded-full bg-[#ff5a1f]/20 border border-[#ff5a1f] flex items-center justify-center mx-auto mb-6 text-[#ff5a1f]">

@@ -624,5 +624,11 @@ html.light footer button:hover,
   color: #0f172a !important;
 }
 
-
-
+/* Mobile & Touch Utility Styles */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

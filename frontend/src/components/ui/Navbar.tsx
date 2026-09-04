@@ -43,10 +43,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMenu }) => {
           ? isDark
             ? "bg-[#08090b]/90 backdrop-blur-md border-b border-white/5 py-3"
             : "bg-white/95 backdrop-blur-md border-b border-[#e2e8f0] py-3 shadow-sm"
-          : "bg-transparent py-5"
+          : "bg-transparent py-4 sm:py-5"
       }`}
     >
-      <div className="max-w-[1680px] mx-auto px-6 sm:px-10 md:px-14 lg:px-20 md:pl-24 flex items-center justify-between">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-10 md:px-14 lg:px-20 md:pl-24 flex items-center justify-between">
         {/* BRAND MARK: MANAS / MISHRA ● */}
         <Link
           href="/"

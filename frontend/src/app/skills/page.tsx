@@ -34,7 +34,7 @@ export default function SkillsPage() {
         {/* Category Sections */}
         <div className="space-y-10 mb-16">
           {/* Section 1: Programming */}
-          <section className="p-8 sm:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
+          <section className="p-5 sm:p-8 md:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
             <div className="flex items-center gap-2.5 text-xs font-mono text-[#ff5a1f] uppercase tracking-wider mb-6 pb-4 border-b border-[#1f222a] font-semibold">
               <Code2 className="w-4 h-4" />
               <span>PROGRAMMING LANGUAGES</span>
@@ -57,7 +57,7 @@ export default function SkillsPage() {
           </section>
 
           {/* Section 2: Data & Machine Learning */}
-          <section className="p-8 sm:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
+          <section className="p-5 sm:p-8 md:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
             <div className="flex items-center gap-2.5 text-xs font-mono text-[#ff5a1f] uppercase tracking-wider mb-6 pb-4 border-b border-[#1f222a] font-semibold">
               <Database className="w-4 h-4" />
               <span>DATA SCIENCE &amp; MACHINE LEARNING</span>
@@ -80,7 +80,7 @@ export default function SkillsPage() {
           </section>
 
           {/* Section 3: Web & Frontend */}
-          <section className="p-8 sm:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
+          <section className="p-5 sm:p-8 md:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
             <div className="flex items-center gap-2.5 text-xs font-mono text-[#ff5a1f] uppercase tracking-wider mb-6 pb-4 border-b border-[#1f222a] font-semibold">
               <Layout className="w-4 h-4" />
               <span>WEB &amp; FRONTEND ARCHITECTURE</span>
@@ -103,7 +103,7 @@ export default function SkillsPage() {
           </section>
 
           {/* Section 4: Backend, Database & Cloud */}
-          <section className="p-8 sm:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
+          <section className="p-5 sm:p-8 md:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
             <div className="flex items-center gap-2.5 text-xs font-mono text-[#ff5a1f] uppercase tracking-wider mb-6 pb-4 border-b border-[#1f222a] font-semibold">
               <Server className="w-4 h-4" />
               <span>BACKEND, APIS &amp; RELATIONAL STORAGE</span>
@@ -126,7 +126,7 @@ export default function SkillsPage() {
           </section>
 
           {/* Section 5: Systems & Tools */}
-          <section className="p-8 sm:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
+          <section className="p-5 sm:p-8 md:p-10 rounded-2xl border border-[#22252e] bg-[#121418] shadow-lg">
             <div className="flex items-center gap-2.5 text-xs font-mono text-[#ff5a1f] uppercase tracking-wider mb-6 pb-4 border-b border-[#1f222a] font-semibold">
               <Terminal className="w-4 h-4" />
               <span>SYSTEM TOOLS &amp; WORKFLOW</span>

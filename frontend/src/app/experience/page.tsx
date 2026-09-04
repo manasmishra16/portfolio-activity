@@ -28,10 +28,10 @@ export default function ExperiencePage() {
         </h1>
 
         {/* Timeline */}
-        <div className="relative border-l border-[#24272f] ml-4 pl-8 sm:pl-10 space-y-14 my-12">
+        <div className="relative border-l border-[#24272f] ml-3 sm:ml-4 pl-6 sm:pl-10 space-y-14 my-12">
           {/* Milestone 1: Undergraduate Degree */}
           <div className="relative">
-            <span className="absolute -left-[41px] sm:-left-[49px] top-1.5 w-4 h-4 rounded-full bg-[#ff5a1f] border-4 border-[#0c0d0e]" />
+            <span className="absolute -left-[33px] sm:-left-[49px] top-1.5 w-4 h-4 rounded-full bg-[#ff5a1f] border-4 border-[#0c0d0e]" />
 
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <span className="font-mono text-xs text-[#ff5a1f] px-2.5 py-1 rounded bg-[#ff5a1f]/10 border border-[#ff5a1f]/30 font-semibold uppercase">
@@ -75,7 +75,7 @@ export default function ExperiencePage() {
 
           {/* Milestone 2: Independent ML & Full-Stack Development */}
           <div className="relative">
-            <span className="absolute -left-[41px] sm:-left-[49px] top-1.5 w-4 h-4 rounded-full bg-[#ff5a1f]/40 border-4 border-[#0c0d0e]" />
+            <span className="absolute -left-[33px] sm:-left-[49px] top-1.5 w-4 h-4 rounded-full bg-[#ff5a1f]/40 border-4 border-[#0c0d0e]" />
 
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <span className="font-mono text-xs text-[#9aa2b5] px-2.5 py-1 rounded bg-[#16181e] border border-[#262933] font-semibold uppercase">

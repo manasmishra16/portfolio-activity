@@ -76,7 +76,7 @@ export default function ResumePage() {
         </div>
 
         {/* PRINTABLE RESUME SHEET */}
-        <div className="p-8 sm:p-12 rounded-2xl border border-[#26292f] bg-[#111316] text-[#c5cbd6] font-sans shadow-2xl">
+        <div className="p-4 sm:p-8 md:p-12 rounded-2xl border border-[#26292f] bg-[#111316] text-[#c5cbd6] font-sans shadow-2xl">
           {/* Header */}
           <div className="border-b border-[#24272f] pb-8 mb-8">
             <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight mb-1 uppercase">

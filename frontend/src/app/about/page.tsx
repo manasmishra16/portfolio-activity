@@ -51,7 +51,7 @@ export default function AboutPage() {
         </div>
 
         {/* Academic Card */}
-        <div className="p-8 sm:p-10 rounded-2xl border border-[#242730] bg-[#121418] mb-14 shadow-xl">
+        <div className="p-5 sm:p-8 md:p-10 rounded-2xl border border-[#242730] bg-[#121418] mb-14 shadow-xl">
           <div className="flex items-center gap-2 text-xs font-mono text-[#ff5a1f] uppercase tracking-wider mb-3 font-semibold">
             <GraduationCap className="w-4 h-4" />
             <span>PRIMARY EDUCATION</span>
