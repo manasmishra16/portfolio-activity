@@ -393,9 +393,20 @@ export const GitHubSection: React.FC = () => {
                       </div>
 
                       {act.commits && act.commits.length > 0 ? (
-                        <p className="text-xs sm:text-sm text-[#cbd0dc] font-sans">
-                          {act.commits[0]}
-                        </p>
+                        act.commitUrl ? (
+                          <a
+                            href={act.commitUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-xs sm:text-sm text-[#cbd0dc] hover:text-[#ff5a1f] font-sans transition-colors block"
+                          >
+                            {act.commits[0]}
+                          </a>
+                        ) : (
+                          <p className="text-xs sm:text-sm text-[#cbd0dc] font-sans">
+                            {act.commits[0]}
+                          </p>
+                        )
                       ) : (
                         <p className="text-xs text-[#717684] font-sans">
                           Automated repository event recorded.

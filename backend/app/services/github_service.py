@@ -18,7 +18,8 @@ class GitHubService:
     def __init__(self):
         self.username = os.getenv("GITHUB_USERNAME", "manasmishra16")
         self.token = os.getenv("GITHUB_TOKEN")
-        self.cache_ttl = 600.0  # 10 minutes cache window
+        self.cache_ttl = 300.0  # 5 minutes for general profile/repos
+        self.activity_cache_ttl = 90.0  # 90 seconds for fresh recent commits without rate-limit risk
 
         self._profile_cache: Optional[Dict[str, Any]] = None
         self._repos_cache: Optional[List[Dict[str, Any]]] = None
@@ -92,7 +93,6 @@ class GitHubService:
             raw = self._fetch_json(url)
             repos_data = []
             for r in raw:
-                # Exclude forks if desired or keep all public repos
                 repos_data.append({
                     "id": r.get("id"),
                     "name": r.get("name"),
@@ -192,19 +192,71 @@ class GitHubService:
 
     def get_activity(self) -> Dict[str, Any]:
         now = time.time()
-        if self._activity_cache and (now - self._last_activity_time < self.cache_ttl):
+        if self._activity_cache and (now - self._last_activity_time < self.activity_cache_ttl):
             return {"data": self._activity_cache, "source": "cache", "cachedAt": self._last_activity_time}
 
-        url = f"https://api.github.com/users/{self.username}/events/public?per_page=15"
+        activities: List[Dict[str, Any]] = []
+
         try:
-            raw = self._fetch_json(url)
-            activities = []
-            for event in raw:
+            # 1. Fetch user repositories sorted by recent push events
+            url_repos = f"https://api.github.com/users/{self.username}/repos?sort=pushed&per_page=6"
+            repos_raw = self._fetch_json(url_repos)
+
+            # 2. Iterate through recently pushed repositories to collect actual commits
+            if isinstance(repos_raw, list):
+                for repo in repos_raw[:5]:
+                    repo_name = repo.get("name")
+                    if not repo_name:
+                        continue
+
+                    repo_full_name = repo.get("full_name") or f"{self.username}/{repo_name}"
+                    repo_html_url = repo.get("html_url") or f"https://github.com/{self.username}/{repo_name}"
+
+                    try:
+                        url_commits = f"https://api.github.com/repos/{self.username}/{repo_name}/commits?per_page=5"
+                        commits_raw = self._fetch_json(url_commits)
+                        if isinstance(commits_raw, list):
+                            for c in commits_raw:
+                                c_detail = c.get("commit", {})
+                                c_author = c_detail.get("author", {})
+                                c_committer = c_detail.get("committer", {})
+                                commit_date = c_author.get("date") or c_committer.get("date") or repo.get("pushed_at")
+                                full_msg = c_detail.get("message", "Update repository")
+                                short_msg = full_msg.strip().split("\n")[0] if full_msg else "Update repository"
+                                sha_id = c.get("sha", "")
+
+                                activities.append({
+                                    "id": sha_id[:7] if sha_id else f"commit_{len(activities)}",
+                                    "type": "PushEvent",
+                                    "repoName": repo_full_name,
+                                    "repoUrl": repo_html_url,
+                                    "commitUrl": c.get("html_url") or f"{repo_html_url}/commit/{sha_id}",
+                                    "createdAt": commit_date,
+                                    "commitCount": 1,
+                                    "commits": [short_msg],
+                                    "action": "commit",
+                                })
+                    except Exception:
+                        continue
+
+            # 3. Sort all commits strictly newest-first
+            activities.sort(key=lambda x: str(x.get("createdAt", "")), reverse=True)
+
+            # 4. If actual commits were collected, store and return top results
+            if activities:
+                top_activities = activities[:15]
+                self._activity_cache = top_activities
+                self._last_activity_time = now
+                return {"data": top_activities, "source": "live"}
+
+            # Fallback to public events feed if commit traversal returned empty
+            url_events = f"https://api.github.com/users/{self.username}/events/public?per_page=15"
+            raw_events = self._fetch_json(url_events)
+            for event in (raw_events if isinstance(raw_events, list) else []):
                 e_type = event.get("type", "Event")
                 repo = event.get("repo", {})
                 payload = event.get("payload", {})
                 commits = payload.get("commits", [])
-
                 commit_messages = [c.get("message") for c in commits if c.get("message")]
 
                 activities.append({
@@ -212,43 +264,75 @@ class GitHubService:
                     "type": e_type,
                     "repoName": repo.get("name"),
                     "repoUrl": f"https://github.com/{repo.get('name')}",
+                    "commitUrl": f"https://github.com/{repo.get('name')}",
                     "createdAt": event.get("created_at"),
                     "commitCount": len(commits),
                     "commits": commit_messages[:3],
                     "action": payload.get("action") or e_type.replace("Event", "").lower(),
                 })
 
-            self._activity_cache = activities
-            self._last_activity_time = now
-            return {"data": activities, "source": "live"}
+            if activities:
+                activities.sort(key=lambda x: str(x.get("createdAt", "")), reverse=True)
+                top_activities = activities[:15]
+                self._activity_cache = top_activities
+                self._last_activity_time = now
+                return {"data": top_activities, "source": "live"}
+
+            raise ValueError("No live commits or events retrieved")
+
         except Exception as e:
             fallback = [
+                {
+                    "id": "25f392c",
+                    "type": "PushEvent",
+                    "repoName": f"{self.username}/portfolio-activity",
+                    "repoUrl": f"https://github.com/{self.username}/portfolio-activity",
+                    "commitUrl": f"https://github.com/{self.username}/portfolio-activity/commit/25f392c",
+                    "createdAt": "2026-09-04T19:12:18Z",
+                    "commitCount": 1,
+                    "commits": ["feat: complete portfolio with live GitHub integration and dual theme system"],
+                    "action": "commit",
+                },
+                {
+                    "id": "60326e7",
+                    "type": "PushEvent",
+                    "repoName": f"{self.username}/portfolio-activity",
+                    "repoUrl": f"https://github.com/{self.username}/portfolio-activity",
+                    "commitUrl": f"https://github.com/{self.username}/portfolio-activity/commit/60326e7",
+                    "createdAt": "2026-09-03T18:15:52Z",
+                    "commitCount": 1,
+                    "commits": ["Initial commit from Create Next App"],
+                    "action": "commit",
+                },
                 {
                     "id": "act_1",
                     "type": "PushEvent",
                     "repoName": f"{self.username}/Heart-disease-prediction",
                     "repoUrl": f"https://github.com/{self.username}/Heart-disease-prediction",
+                    "commitUrl": f"https://github.com/{self.username}/Heart-disease-prediction",
                     "createdAt": "2026-08-31T19:48:47Z",
                     "commitCount": 1,
                     "commits": ["Update model training pipeline and ECG feature preprocessing"],
-                    "action": "push",
+                    "action": "commit",
                 },
                 {
                     "id": "act_2",
                     "type": "PushEvent",
                     "repoName": f"{self.username}/portfolio",
                     "repoUrl": f"https://github.com/{self.username}/portfolio",
-                    "createdAt": "2026-08-26T23:18:13Z",
-                    "commitCount": 2,
-                    "commits": ["Initialize zero-gravity 3D spatial canvas and full-stack API"],
-                    "action": "push",
+                    "commitUrl": f"https://github.com/{self.username}/portfolio",
+                    "createdAt": "2026-08-31T19:51:06Z",
+                    "commitCount": 1,
+                    "commits": ["chore: add local run script and graphify project output"],
+                    "action": "commit",
                 },
                 {
                     "id": "act_3",
                     "type": "CreateEvent",
                     "repoName": f"{self.username}/mango-frontend",
                     "repoUrl": f"https://github.com/{self.username}/mango-frontend",
-                    "createdAt": "2026-08-25T14:10:00Z",
+                    "commitUrl": f"https://github.com/{self.username}/mango-frontend",
+                    "createdAt": "2026-05-30T14:39:34Z",
                     "commitCount": 0,
                     "commits": [],
                     "action": "create",

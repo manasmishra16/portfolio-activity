@@ -50,6 +50,7 @@ export interface GitHubActivityData {
   type: string;
   repoName: string;
   repoUrl: string;
+  commitUrl?: string;
   createdAt: string;
   commitCount: number;
   commits: string[];
