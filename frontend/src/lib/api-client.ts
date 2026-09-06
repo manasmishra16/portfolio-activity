@@ -101,6 +101,7 @@ export interface ContactPayload {
   email: string;
   subject?: string;
   message: string;
+  honeypot?: string;
 }
 
 export interface ContactResponseData {

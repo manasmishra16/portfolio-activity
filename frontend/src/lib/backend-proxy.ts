@@ -10,12 +10,15 @@ export async function fetchFromFastAPI<T>(endpoint: string, options?: RequestIni
   const url = `${FASTAPI_BASE_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
 
   try {
+    const isWrite = options?.method && options.method.toUpperCase() !== "GET";
+    const timeoutMs = isWrite ? 10000 : 3500; // 10s for database/email writes, 3.5s for reads
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5s timeout
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
     const res = await fetch(url, {
       ...options,
-      signal: controller.signal,
+      signal: options?.signal || controller.signal,
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",

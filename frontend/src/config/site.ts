@@ -59,7 +59,8 @@ export const SITE_CONFIG = {
   headline: "Computer Science Engineer building intelligent ML systems, data architectures, and immersive web experiences.",
   email: "manasmishra16@gmail.com",
   github: "https://github.com/manasmishra16",
-  linkedin: "https://linkedin.com/in/manasmishra16",
+  linkedin: "https://www.linkedin.com/in/manas16",
+  resumePdf: "/resume/Manas_Mishra_ATS_Resume.pdf",
   education: {
     degree: "Bachelor of Engineering in Computer Science & Engineering",
     institution: "KS Institute of Technology",

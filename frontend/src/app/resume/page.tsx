@@ -39,88 +39,94 @@ export default function ResumePage() {
 
   return (
     <PageShell>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-[880px] mx-auto">
         {/* Header Action Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-[#23262c]">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#ff5a1f]" />
-              <span className="font-mono text-xs text-[#878e9c] tracking-[0.3em] uppercase">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-6 border-b border-[#1f2229] print:hidden">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff5a1f] shrink-0 shadow-[0_0_6px_rgba(255,90,31,0.8)]" />
+              <span className="font-mono text-[10px] sm:text-xs text-[#878e9c] tracking-[0.25em] uppercase font-semibold">
                 CURRICULUM VITAE // VERIFIED CREDENTIALS
               </span>
             </div>
-            <h1 className="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-[-0.03em]">
-              Resume Dossier
+            <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-[42px] leading-tight text-white tracking-[-0.02em]">
+              Resume <span className="text-[#d8dee8]">Dossier</span>
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
             <button
+              type="button"
               onClick={handlePrint}
               onMouseEnter={() => soundManager.playHover()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#272a31] bg-[#14161a] hover:border-white text-xs font-mono text-white transition-colors cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 h-10 px-4 sm:px-5 rounded-full border border-[#272a31] bg-[#14161a] hover:border-[#404552] text-xs font-mono text-[#c5cbd6] hover:text-white transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a1f]"
+              aria-label="Print or save portfolio Resume Dossier"
             >
-              <Printer className="w-3.5 h-3.5" />
+              <Printer className="w-3.5 h-3.5 shrink-0 text-[#8a909f]" aria-hidden="true" />
               <span>Print / Save PDF</span>
             </button>
 
             <a
-              href="mailto:manasmishra16@gmail.com?subject=Resume%20Inquiry%20-%20Manas%20Mishra"
+              href="/resume/Manas_Mishra_ATS_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               onMouseEnter={() => soundManager.playHover()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ff5a1f] hover:bg-[#ff7700] text-xs font-mono text-white font-semibold shadow-[0_0_15px_rgba(255,90,31,0.4)] transition-all cursor-pointer"
+              onClick={() => soundManager.playClick()}
+              className="inline-flex items-center justify-center gap-2 h-10 px-4 sm:px-5 rounded-full bg-[#ff5a1f] hover:bg-[#ff6f33] text-xs font-mono text-white font-semibold shadow-[0_0_15px_rgba(255,90,31,0.35)] hover:shadow-[0_0_22px_rgba(255,90,31,0.5)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c0d0e]"
+              aria-label="Open original ATS Resume PDF in a new tab"
             >
-              <Mail className="w-3.5 h-3.5" />
+              <ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               <span>Request Direct PDF</span>
             </a>
           </div>
         </div>
 
         {/* PRINTABLE RESUME SHEET */}
-        <div className="p-4 sm:p-8 md:p-12 rounded-2xl border border-[#26292f] bg-[#111316] text-[#c5cbd6] font-sans shadow-2xl">
+        <div className="p-5 sm:p-9 md:p-12 rounded-2xl border border-[#1f2229] bg-[#101215] text-[#c5cbd6] font-sans shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
           {/* Header */}
-          <div className="border-b border-[#24272f] pb-8 mb-8">
-            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight mb-1 uppercase">
+          <div className="border-b border-[#1f2229] pb-8 mb-8">
+            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight mb-1.5 uppercase">
               {SITE_CONFIG.name}
             </h2>
             <div className="font-mono text-xs text-[#ff5a1f] font-semibold tracking-wider uppercase mb-4">
               DATA → INTELLIGENCE → APPLICATION // COMPUTER SCIENCE ENGINEER
             </div>
 
-            <div className="flex flex-wrap gap-y-2 gap-x-6 text-xs font-mono text-[#8a909f]">
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#ff5a1f]" />
-                {SITE_CONFIG.education.location}
+            <div className="flex flex-wrap gap-y-2 gap-x-4 sm:gap-x-6 text-xs font-mono text-[#8a909f]">
+              <span className="flex items-center gap-1.5 shrink-0">
+                <MapPin className="w-3.5 h-3.5 text-[#ff5a1f] shrink-0" />
+                <span>{SITE_CONFIG.education.location}</span>
               </span>
               <a
                 href={`mailto:${SITE_CONFIG.email}`}
-                className="flex items-center gap-1.5 text-white hover:underline"
+                className="flex items-center gap-1.5 text-white hover:underline break-all"
               >
-                <Mail className="w-3.5 h-3.5 text-[#ff5a1f]" />
-                {SITE_CONFIG.email}
+                <Mail className="w-3.5 h-3.5 text-[#ff5a1f] shrink-0" />
+                <span>{SITE_CONFIG.email}</span>
               </a>
               <a
                 href={SITE_CONFIG.github}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 text-white hover:underline"
+                className="flex items-center gap-1.5 text-white hover:underline break-all"
               >
-                <GitHubIcon className="w-3.5 h-3.5 text-[#ff5a1f]" />
-                github.com/{SITE_CONFIG.handle}
+                <GitHubIcon className="w-3.5 h-3.5 text-[#ff5a1f] shrink-0" />
+                <span>github.com/{SITE_CONFIG.handle}</span>
               </a>
               <a
                 href={SITE_CONFIG.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 text-white hover:underline"
+                className="flex items-center gap-1.5 text-white hover:underline break-all"
               >
-                <LinkedInIcon className="w-3.5 h-3.5 text-[#ff5a1f]" />
-                linkedin.com/in/manasmishra16
+                <LinkedInIcon className="w-3.5 h-3.5 text-[#ff5a1f] shrink-0" />
+                <span>linkedin.com/in/manas16</span>
               </a>
             </div>
           </div>
 
           {/* Education */}
-          <section className="mb-8 pb-8 border-b border-[#202227]">
+          <section className="mb-8 pb-8 border-b border-[#1c1f26]">
             <h3 className="font-mono text-xs font-bold text-[#ff5a1f] uppercase tracking-[0.25em] mb-4">
               EDUCATION
             </h3>
@@ -145,7 +151,7 @@ export default function ResumePage() {
           </section>
 
           {/* Technical Skills */}
-          <section className="mb-8 pb-8 border-b border-[#202227]">
+          <section className="mb-8 pb-8 border-b border-[#1c1f26]">
             <h3 className="font-mono text-xs font-bold text-[#ff5a1f] uppercase tracking-[0.25em] mb-4">
               TECHNICAL PROFICIENCIES
             </h3>
@@ -175,7 +181,7 @@ export default function ResumePage() {
           </section>
 
           {/* Selected Projects */}
-          <section className="mb-8 pb-8 border-b border-[#202227]">
+          <section className="mb-8 pb-8 border-b border-[#1c1f26]">
             <h3 className="font-mono text-xs font-bold text-[#ff5a1f] uppercase tracking-[0.25em] mb-4">
               ENGINEERING PROJECTS
             </h3>

@@ -9,7 +9,7 @@ RESUME_METADATA = {
         "positioning": "DATA → INTELLIGENCE → APPLICATION",
         "email": "manasmishra16@gmail.com",
         "github": "https://github.com/manasmishra16",
-        "linkedin": "https://linkedin.com/in/manasmishra16",
+        "linkedin": "https://www.linkedin.com/in/manas16",
         "location": "Bengaluru, Karnataka, India",
         "summary": "Computer Science & Engineering undergraduate specializing in deep learning architectures (CNN + LSTM), automated feature pipelines, and high-performance full-stack web systems. Proven record of building end-to-end data-driven software from mathematical foundations to production web applications."
     },

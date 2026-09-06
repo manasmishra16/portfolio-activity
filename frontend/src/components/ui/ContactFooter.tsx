@@ -27,6 +27,7 @@ export const ContactFooter: React.FC<ContactFooterProps> = ({
     initialProjectName ? `Discussion on ${initialProjectName}` : "General Engineering Inquiry"
   );
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -71,15 +72,37 @@ export const ContactFooter: React.FC<ContactFooterProps> = ({
     e.preventDefault();
     setErrorMessage("");
 
-    if (!name.trim() || !email.trim() || !message.trim()) {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedSubject = subject.trim() || "General Engineering Inquiry";
+    const trimmedMessage = message.trim();
+
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
       setErrorMessage("Please complete all required fields.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
+    if (trimmedMessage.length < 5) {
+      setErrorMessage("Message must be at least 5 characters long.");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      await apiClient.sendContactMessage({ name, email, subject, message });
+      await apiClient.sendContactMessage({
+        name: trimmedName,
+        email: trimmedEmail,
+        subject: trimmedSubject,
+        message: trimmedMessage,
+        honeypot: honeypot || undefined,
+      });
 
       soundManager.playWhoosh();
 
@@ -95,6 +118,10 @@ export const ContactFooter: React.FC<ContactFooterProps> = ({
       }
 
       setSubmitted(true);
+      setName("");
+      setEmail("");
+      setMessage("");
+      setHoneypot("");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
       setErrorMessage(msg);
@@ -197,10 +224,26 @@ export const ContactFooter: React.FC<ContactFooterProps> = ({
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Invisible Honeypot field for bot deterrence */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="website_url_trap">Leave this empty</label>
+                <input
+                  id="website_url_trap"
+                  type="text"
+                  name="website_url_trap"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               {errorMessage && (
-                <div className="p-3.5 rounded-xl border border-red-500/40 bg-red-500/10 text-red-400 text-xs font-mono flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{errorMessage}</span>
+                <div className="p-3.5 rounded-xl border border-red-500/40 bg-red-500/10 text-red-400 text-xs font-mono flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 leading-relaxed">
+                    <span>{errorMessage}</span>
+                  </div>
                 </div>
               )}
 

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Mail } from "lucide-react";
+import { SITE_CONFIG } from "@/config/site";
 
 const GithubIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -39,7 +40,7 @@ export const VerticalRail: React.FC = () => {
       {/* Bottom: Social Links */}
       <div className="flex flex-col items-center gap-4 pointer-events-auto mt-auto pt-6">
         <a
-          href="https://github.com/manasmishra16"
+          href={SITE_CONFIG.github}
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#6c7588] hover:text-[#ff5a1f] transition-colors p-1"
@@ -48,7 +49,7 @@ export const VerticalRail: React.FC = () => {
           <GithubIcon />
         </a>
         <a
-          href="https://linkedin.com/in/manasmishra16"
+          href={SITE_CONFIG.linkedin}
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#6c7588] hover:text-[#ff5a1f] transition-colors p-1"
@@ -57,9 +58,9 @@ export const VerticalRail: React.FC = () => {
           <LinkedinIcon />
         </a>
         <a
-          href="mailto:manasmishra16@gmail.com"
+          href={`mailto:${SITE_CONFIG.email}`}
           className="text-[#6c7588] hover:text-[#ff5a1f] transition-colors p-1"
-          aria-label="Email Manas Mishra"
+          aria-label={`Email ${SITE_CONFIG.name}`}
         >
           <Mail className="w-4 h-4" />
         </a>

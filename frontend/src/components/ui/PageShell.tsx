@@ -29,7 +29,7 @@ export const PageShell: React.FC<PageShellProps> = ({ children }) => {
         onClose={() => setIsMenuOpen(false)}
       />
 
-      <main className="relative z-10 pt-24 sm:pt-36 pb-20 sm:pb-24 px-4 sm:px-8 md:px-16 md:pl-28 max-w-7xl mx-auto min-h-[calc(100vh-200px)]">
+      <main className="relative z-10 pt-24 sm:pt-32 pb-20 sm:pb-24 px-4 sm:px-8 md:px-16 md:pl-28 max-w-7xl mx-auto min-h-[calc(100vh-200px)]">
         {children}
       </main>
 

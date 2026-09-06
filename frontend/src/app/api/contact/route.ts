@@ -1,16 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchFromFastAPI } from "@/lib/backend-proxy";
 
-// Simple IP / session submission rate limiter
+interface ContactFastAPIResponse {
+  success: boolean;
+  message: string;
+  reference_id: string;
+  timestamp: string;
+}
+
+// In-memory sliding-window IP rate limiter on Next.js edge
 const ipSubmissionTimestamps = new Map<string, number>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, honeypot } = body;
 
-    // Validation
+    // 1. Silent Honeypot Trap
+    if (honeypot && String(honeypot).trim().length > 0) {
+      return NextResponse.json({
+        success: true,
+        message: "Transmission recorded.",
+        referenceId: `msg_bot_${Math.random().toString(36).substring(2, 8)}`,
+      });
+    }
+
+    // 2. Validate Required Fields
     if (!name || typeof name !== "string" || name.trim().length < 2) {
       return NextResponse.json(
         { error: "Valid name (at least 2 characters) is required." },
@@ -33,7 +49,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Rate limit check
+    // 3. Client IP Extraction & Rate Limiting
     const forwarded = req.headers.get("x-forwarded-for");
     const ip = forwarded ? forwarded.split(",")[0].trim() : "local-client";
     const lastTime = ipSubmissionTimestamps.get(ip) || 0;
@@ -49,7 +65,7 @@ export async function POST(req: NextRequest) {
 
     ipSubmissionTimestamps.set(ip, now);
 
-    // Clean up old entries
+    // Clean up memory cache
     if (ipSubmissionTimestamps.size > 200) {
       for (const [key, timestamp] of ipSubmissionTimestamps.entries()) {
         if (now - timestamp > RATE_LIMIT_WINDOW_MS * 2) {
@@ -58,36 +74,45 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Structured message transmission record
-    const messageRecord = {
-      id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      subject: subject ? String(subject).trim() : "General Inquiry",
-      message: message.trim(),
-      receivedAt: new Date().toISOString(),
-      recipient: "manasmishra16@gmail.com",
-    };
-
-    // Forward to FastAPI backend audit log asynchronously
-    fetchFromFastAPI("/api/contact", {
+    // 4. Forward to FastAPI backend (which saves to PostgreSQL and triggers Resend notification)
+    const fastApiResult = await fetchFromFastAPI<ContactFastAPIResponse>("/api/contact/", {
       method: "POST",
-      body: JSON.stringify(body),
-    }).catch(() => {});
-
-    // Log to server console
-    console.log("📨 Contact Form Transmission Received:", JSON.stringify(messageRecord, null, 2));
-
-    return NextResponse.json({
-      success: true,
-      message: "Message successfully transmitted to Manas Mishra.",
-      referenceId: messageRecord.id,
-      timestamp: messageRecord.receivedAt,
+      headers: {
+        "X-Forwarded-For": ip,
+      },
+      body: JSON.stringify({
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        subject: subject ? String(subject).trim() : "Portfolio Inquiry",
+        message: message.trim(),
+        honeypot: honeypot || null,
+      }),
     });
-  } catch (err) {
-    console.error("Contact API error:", err);
+
+    if (fastApiResult.data && fastApiResult.data.success) {
+      return NextResponse.json({
+        success: true,
+        message: fastApiResult.data.message || "Message successfully transmitted to Manas Mishra.",
+        referenceId: fastApiResult.data.reference_id,
+        timestamp: fastApiResult.data.timestamp,
+      });
+    }
+
+    // If FastAPI was unreachable or returned an error
+    if (fastApiResult.error) {
+      console.warn("FastAPI contact proxy warning:", fastApiResult.error);
+    }
+
     return NextResponse.json(
-      { error: "Internal server error processing contact submission." },
+      {
+        error: "Unable to transmit your message right now. Please try again in a moment or email me directly at manasmishra16@gmail.com.",
+      },
+      { status: 503 }
+    );
+  } catch (err) {
+    console.error("Contact route handler error:", err);
+    return NextResponse.json(
+      { error: "Unable to process message transmission. Please email directly at manasmishra16@gmail.com." },
       { status: 500 }
     );
   }
