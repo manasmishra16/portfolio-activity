@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageShell } from "@/components/ui/PageShell";
 import { Lock, Eye, EyeOff, ShieldCheck, ArrowRight, Loader2, AlertCircle } from "lucide-react";
@@ -12,22 +12,6 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function checkExistingSession() {
-      try {
-        const res = await fetch("/api/admin/session", { cache: "no-store" });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.authenticated) {
-            router.replace("/admin/messages");
-          }
-        }
-      } catch (err) {
-        console.error("Session check failed:", err);
-      }
-    }
-    checkExistingSession();
-  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

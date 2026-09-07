@@ -57,6 +57,7 @@ app.include_router(notes.router, prefix="/api/notes", tags=["Notes"])
 app.include_router(resume.router, prefix="/api/resume", tags=["Resume"])
 app.include_router(stats.router, prefix="/api/stats", tags=["Stats"])
 app.include_router(contact.router, prefix="/api/contact", tags=["Contact"])
+app.include_router(contact.router, prefix="/api/admin", tags=["Admin Contact"])
 
 @app.get("/")
 def root():

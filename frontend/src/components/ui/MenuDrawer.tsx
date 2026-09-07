@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { X, ArrowUpRight, Mail, FileText } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { X, ArrowUpRight } from "lucide-react";
 import { LinkedInIcon, GitHubIcon } from "@/components/ui/Icons";
 import { soundManager } from "@/lib/audio";
 import { SITE_CONFIG } from "@/config/site";
@@ -30,6 +31,16 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
   isOpen,
   onClose,
 }) => {
+  const pathname = usePathname();
+
+  const handleItemClick = () => {
+    if (pathname?.startsWith("/admin")) {
+      fetch("/api/admin/logout", { method: "POST", keepalive: true }).catch(() => {});
+    }
+    soundManager.playClick();
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -62,10 +73,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
             <div key={item.num}>
               <Link
                 href={item.href}
-                onClick={() => {
-                  soundManager.playClick();
-                  onClose();
-                }}
+                onClick={handleItemClick}
                 onMouseEnter={() => soundManager.playHover()}
                 className="group flex items-baseline gap-4 text-left cursor-pointer py-1.5"
               >
@@ -83,10 +91,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
           <div>
             <Link
               href="/contact"
-              onClick={() => {
-                soundManager.playClick();
-                onClose();
-              }}
+              onClick={handleItemClick}
               onMouseEnter={() => soundManager.playHover()}
               className="group flex items-baseline gap-4 text-left cursor-pointer py-1.5"
             >

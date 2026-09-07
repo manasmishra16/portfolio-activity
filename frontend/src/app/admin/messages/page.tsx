@@ -72,6 +72,7 @@ export default function AdminMessagesPage() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+
   // Fetch messages from Next.js server proxy
   const fetchMessages = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
@@ -120,6 +121,7 @@ export default function AdminMessagesPage() {
   }, [statusFilter, debouncedSearch, router]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMessages();
   }, [fetchMessages]);
 

@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { cookies } from "next/headers";
 
 export const ADMIN_SESSION_COOKIE = "portfolio_admin_session";
-const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SESSION_DURATION_MS = 30 * 60 * 1000; // 30 minutes active session window
 
 interface SessionPayload {
   authenticated: boolean;
@@ -119,7 +119,6 @@ export async function setAdminSessionCookie(): Promise<void> {
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
   });
 }
 

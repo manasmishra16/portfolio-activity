@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Menu, FileText, Sun, Moon } from "lucide-react";
 import { soundManager } from "@/lib/audio";
 import { useTheme } from "@/lib/theme-context";
@@ -25,7 +25,6 @@ const NAV_LINKS = [
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenMenu }) => {
   const pathname = usePathname();
-  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPrivateModalOpen, setIsPrivateModalOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
@@ -35,26 +34,84 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMenu }) => {
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const touchStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const pointerStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const longPressTriggeredRef = useRef(false);
 
-  const triggerPrivateAccess = useCallback(async () => {
-    try {
-      const res = await fetch("/api/admin/session", { cache: "no-store" });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.authenticated) {
-          router.push("/admin/messages");
-          return;
-        }
-      }
-    } catch {
-      // Fall through to modal
-    }
+  const triggerPrivateAccess = useCallback(() => {
     setIsPrivateModalOpen(true);
-  }, [router]);
+  }, []);
 
-  const handleLogoClick = (e: React.MouseEvent) => {
+  const clearLongPressTimer = useCallback(() => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLAnchorElement>) => {
+    // Only track touch interactions for mobile long-press
+    if (e.pointerType !== "touch") return;
+
+    pointerStartPosRef.current = { x: e.clientX, y: e.clientY };
+    longPressTriggeredRef.current = false;
+    clearLongPressTimer();
+
+    longPressTimerRef.current = setTimeout(() => {
+      longPressTriggeredRef.current = true;
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        try {
+          navigator.vibrate(50);
+        } catch {}
+      }
+      triggerPrivateAccess();
+    }, 1500);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLAnchorElement>) => {
+    if (!longPressTimerRef.current || e.pointerType !== "touch") return;
+    const deltaX = Math.abs(e.clientX - pointerStartPosRef.current.x);
+    const deltaY = Math.abs(e.clientY - pointerStartPosRef.current.y);
+
+    // Cancel if movement exceeds ~10px in any direction (scrolling or dragging)
+    if (deltaX > 10 || deltaY > 10) {
+      clearLongPressTimer();
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLAnchorElement>) => {
+    if (e.pointerType === "touch") {
+      clearLongPressTimer();
+    }
+  };
+
+  const handlePointerCancel = () => {
+    clearLongPressTimer();
+  };
+
+  // Cancel long-press if page visibility changes (e.g., tab switch, screen off)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        clearLongPressTimer();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      clearLongPressTimer();
+    };
+  }, [clearLongPressTimer]);
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // If a long press was triggered on mobile, cancel normal navigation
+    if (longPressTriggeredRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      longPressTriggeredRef.current = false;
+      return;
+    }
+
+    // Desktop: 5 rapid clicks within 1.5s
     clickCountRef.current += 1;
 
     if (clickTimerRef.current) {
@@ -73,50 +130,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMenu }) => {
         clearTimeout(clickTimerRef.current);
       }
       triggerPrivateAccess();
+      return;
+    }
+
+    // If navigating home from admin area on normal single click, invalidate session
+    if (pathname?.startsWith("/admin")) {
+      fetch("/api/admin/logout", { method: "POST", keepalive: true }).catch(() => {});
     }
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length !== 1) return;
-    touchStartPosRef.current = {
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    };
-    longPressTriggeredRef.current = false;
-
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-    }
-
-    longPressTimerRef.current = setTimeout(() => {
-      longPressTriggeredRef.current = true;
-      if (typeof navigator !== "undefined" && navigator.vibrate) {
-        navigator.vibrate(50);
-      }
-      triggerPrivateAccess();
-    }, 1500);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!longPressTimerRef.current || e.touches.length !== 1) return;
-    const deltaX = Math.abs(e.touches[0].clientX - touchStartPosRef.current.x);
-    const deltaY = Math.abs(e.touches[0].clientY - touchStartPosRef.current.y);
-
-    if (deltaX > 10 || deltaY > 10) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-
-    if (longPressTriggeredRef.current) {
-      e.preventDefault();
-      e.stopPropagation();
+  const handleNavClick = () => {
+    if (pathname?.startsWith("/admin")) {
+      fetch("/api/admin/logout", { method: "POST", keepalive: true }).catch(() => {});
     }
   };
 
@@ -145,13 +170,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMenu }) => {
         <Link
           href="/"
           onClick={handleLogoClick}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onTouchCancel={handleTouchEnd}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
           onContextMenu={(e) => {
-            if (longPressTriggeredRef.current) e.preventDefault();
+            // Prevent Android Chrome's native link context menu specifically for this trigger
+            e.preventDefault();
           }}
+          style={{ WebkitTouchCallout: "none" }}
           className="group flex items-center gap-2 select-none shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#ff5a1f] rounded"
           aria-label="Manas Mishra Home"
         >
@@ -183,6 +210,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMenu }) => {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={handleNavClick}
                 className={`relative py-1 transition-colors duration-200 ${
                   isActive
                     ? isDark
@@ -206,6 +234,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMenu }) => {
         <div className="hidden lg:flex items-center gap-3 shrink-0">
           <Link
             href="/resume"
+            onClick={handleNavClick}
             className={`inline-flex items-center gap-2 h-9 px-4 rounded-full border text-xs font-mono font-semibold tracking-wider transition-all duration-200 ${
               pathname === "/resume"
                 ? "border-[#ff5a1f] bg-[#ff5a1f] text-white shadow-[0_0_15px_rgba(255,90,31,0.35)]"
